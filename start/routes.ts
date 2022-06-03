@@ -24,7 +24,19 @@ Route.get('/', async () => {
   return { hello: 'world' }
 });
 Route.post('/login', 'AuthController.login');
-Route.get('/clubs', 'ClubsController.index');
-Route.get('/clubs/:slug', 'ClubsController.show');
+//route for club
+Route.group(()=>{
+  Route.get('/clubs','ClubsController.index');
+  Route.get('/clubs/:slug','ClubsController.show');
+  Route.post('/clubs','ClubsController.store');
+  Route.put('/clubs/:id','ClubsController.update');
+  Route.delete('/clubs/:slug','ClubsController.destroy');
+});
 Route.get('/leagues', 'LeaguesController.index');
 Route.get('/leagues/:slug', 'LeaguesController.show');
+Route.get('/leagues/:id/teams', function(ctx: any) {
+ // ctx.params('slug');
+  return {
+    slug: ctx.params.id,
+  }
+});
