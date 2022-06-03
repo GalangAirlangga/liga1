@@ -13,11 +13,13 @@ export default class extends BaseSchema {
         .integer('league_id')
         .unsigned()
         .references('leagues.id')
+        .onDelete('cascade')
       //make relations to clubs
       table
         .integer('club_id')
         .unsigned()
         .references('clubs.id')
+        .onDelete('cascade')
       table.integer('position', 2).notNullable()
       table.integer('played', 2).notNullable()
       table.integer('won', 2).notNullable()

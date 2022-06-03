@@ -10,15 +10,15 @@ export default class extends BaseSchema {
       table.string('full_name', 250).notNullable()
       table.string('short_name', 50).notNullable()
       table.string('slug', 250).notNullable()
-      table.string('logo', 250).notNullable()
+      table.string('logo', 250).nullable()
       table.string('country', 250).notNullable()
       table.string('city', 250).notNullable()
       table.string('stadium', 250).notNullable()
-      table.integer('stadium_capacity').notNullable()
-      table.string('stadium_location', 250).notNullable()
-      table.text('stadium_description').notNullable()
-      table.string('stadium_image', 250).notNullable()
-      table.string('fans_name', 250).notNullable()
+      table.integer('stadium_capacity').nullable()
+      table.string('stadium_location', 250).nullable()
+      table.text('stadium_description').nullable()
+      table.string('stadium_image', 250).nullable()
+      table.string('fans_name', 250).nullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
