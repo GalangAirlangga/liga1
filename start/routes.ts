@@ -23,7 +23,10 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.get('/', async () => {
   return { hello: 'world' }
 });
-Route.post('/login', 'AuthController.login');
+Route.group(() => {
+  Route.post('/login', 'AuthController.login');
+  //Route.post('/register', 'AuthController.register');
+});
 //route for club
 Route.group(()=>{
   Route.get('/clubs','ClubsController.index');
@@ -32,11 +35,13 @@ Route.group(()=>{
   Route.put('/clubs/:id','ClubsController.update');
   Route.delete('/clubs/:slug','ClubsController.destroy');
 });
-Route.get('/leagues', 'LeaguesController.index');
-Route.get('/leagues/:slug', 'LeaguesController.show');
-Route.get('/leagues/:id/teams', function(ctx: any) {
- // ctx.params('slug');
-  return {
-    slug: ctx.params.id,
-  }
-});
+Route.group(()=>{
+  Route.get('/leagues', 'LeaguesController.index');
+  Route.get('/leagues/:slug', 'LeaguesController.show');
+  Route.get('/leagues/:id/teams', function (ctx: any) {
+    // ctx.params('slug');
+    return {
+      slug: ctx.params.id,
+    }
+  });
+})

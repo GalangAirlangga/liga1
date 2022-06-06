@@ -1,7 +1,7 @@
  //import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/Users'
 import Hash  from '@ioc:Adonis/Core/Hash'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import LoginValidator from 'App/Validators/LoginValidator'
 export default class AuthController {
 /**
  *
@@ -10,20 +10,10 @@ export default class AuthController {
  */
   public async login({ request, response, auth }) {
 
-    //make schema for validation
-    const schemaLogin = schema.create({
-      email: schema.string({ trim: true }, [
-        rules.email(),
-        rules.exists({ table: 'users', column: 'email' }),
-      ]),
-      password: schema.string({ trim: true }, [
-        rules.minLength(6),
-      ]),
-    })
 
     try {
      //validate schema
-      const validation = await request.validate({ schema: schemaLogin })
+      const validation = await request.validate(LoginValidator)
       // Lookup user manually
       const user = await User
         .query()
@@ -32,18 +22,20 @@ export default class AuthController {
 
       // Verify password
       if (!(await Hash.verify(user.password, validation.password))) {
-        return response.badRequest('Invalid credentials')
+        return response.badRequest({message:'Invalid credentials'})
       }
 
       // Generate token
       const token = await auth.use('api').generate(user)
       return response.json({
         message: 'Hello world',
-        token: token
+        data: {
+          token: token
+        }
       })
     } catch (error) {
       // Handle the error
-      response.badRequest(error.messages)
+      response.badRequest({message:error.messages})
     }
 
   }

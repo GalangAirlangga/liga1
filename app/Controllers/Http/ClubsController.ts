@@ -1,4 +1,3 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Club from 'App/Models/Club'
 import Database from '@ioc:Adonis/Lucid/Database'
 import CreateClubValidator from 'App/Validators/CreateClubValidator'
@@ -27,12 +26,15 @@ export default class ClubsController {
           builder.where('country', 'like', `%${validation.country}%`)
         })
         trx.commit()
-      return response.json(clubs)
+      return response.json({
+        message: 'List of clubs',
+        data: clubs
+      })
     }
     catch (error) {
       //handle error
       trx.rollback()
-      return response.json(error.messages)
+      return response.badRequest({message:error.messages})
     }
 
   }
@@ -93,7 +95,7 @@ export default class ClubsController {
       })
     } catch (error) {
       await trx.rollback()
-      response.json(error.messages)
+      response.badRequest({message:error.messages})
     }
 
   }
@@ -115,9 +117,10 @@ export default class ClubsController {
         })
       }
       //return response
-      return response.json({data:club})
+      return response.json({message:'Details of club',data:club})
     } catch (error) {
       await trx.rollback()
+      return response.badRequest({message:error.messages})
     }
 
   }
@@ -188,7 +191,7 @@ export default class ClubsController {
       })
     } catch (error) {
       await trx.rollback()
-      response.json(error.messages)
+      response.json({message:error.messages})
     }
    }
 
@@ -215,7 +218,7 @@ export default class ClubsController {
       })
     } catch (error) {
       await trx.rollback()
-      response.status(400).json(error.messages)
+      response.badRequest({message:error.messages})
     }
 
    }
